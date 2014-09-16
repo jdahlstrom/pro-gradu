@@ -1,0 +1,17 @@
+\chapter{Introduction}
+
+Interactive software systems are becoming progressively more complex, driven by the demand for richer user interaction along with the ever-increasing multimedia capabilities of modern hardware. Applications are increasingly targeted on the World Wide Web platform, and the inherently distributed nature of web applications brings forth its own challenges. Not only are they required to serve an ever-increasing number of users, but also, increasingly, to facilitate interaction \emph{between} users. 
+
+In object-oriented programming, the usual means of implementing a user interface is to make use of the Observer design pattern. In this pattern, interested objects can register themselves as \emph{observers}, or listeners, of events, such as mouse clicks or key presses, sent by user interface elements. When an observer is notified of an event, it reacts in an appropriate manner by initiating a computation or otherwise changing the application state. Similarly, the user interface may react to events triggered by some underlying computation, signaling the user that something requires his or her attention.
+
+The traditional observer pattern has several disadvantages. Observers are difficult to compose and reuse, leading to instances of partial or complete code duplication. Events often lack important context, making it necessary to manually keep track of the program state and share the bookkeeping between different observers. The resulting code typically forms a complex and fragile state machine, making it difficult to reason about its behavior and correctness.
+
+Reactive programming is a programming style centered on the concept of propagating change. In a reactive system, a variable can be bound to other variables so that its value changes automatically as a response to value changes in other components of the bound system. A common example of such reactivity is a spreadsheet application, where the value of a cell can be a formula referring to several other cells. The displayed value of the cell is refreshed whenever the value of a referenced cell changes.
+
+Reactive functional programming
+
+In the recent years, several mainstream object-oriented programming languages used in the industry have adopted concepts traditionally belonging to the relatively academic realm of functional programming. These include functions as first-class values; anonymous functions (lambdas); and combinators such as map, filter, and reduce. One impetus for this paradigm shift has been the constantly increasing importance of concurrency and parallelism in software. Correctly managing and reasoning about mutable state shared between concurrent threads of execution is notoriously difficult, and the general disposition towards immutable state in functional programming has proven to be a useful basis for building better concurrency abstractions.
+
+One way of improving upon the observer pattern is to elevate the abstract concept of an event stream to a first-class data type. Event streams, or \emph{observables}, can then be merged, transformed, and otherwise manipulated using the familiar functional toolset.
+
+Vaadin is a web application framework written in Java, aiming to provide a rich set of user interface components facilitating rapid application development. It also contains a data binding layer for propagating input and output between the user and a data model. Both the user interface and data binding are designed in terms of the observer pattern. 
