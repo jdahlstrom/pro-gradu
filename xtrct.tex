@@ -1,0 +1,35 @@
+%
+% Simple template to extract abstract and/or tiivistelm� from M.Sc. Thesis
+%
+% Sami Nuuttila, samnuutt@utu.fi
+%
+\documentclass[a4paper,12pt]{article}
+
+% Page geometry manipulations...yuck! Fix as appropriate
+\setlength{\hoffset}{0mm}
+\setlength{\marginparsep}{0mm}
+\setlength{\marginparwidth}{0mm}
+\setlength{\textwidth}{\paperwidth}% textw <= paperw
+\setlength{\oddsidemargin}{-1 in}% lmargin <= 1 in - 1in 
+%
+\setlength{\voffset}{0 pt}
+\setlength{\headsep}{0 pt}
+\setlength{\headheight}{0 pt}
+\setlength{\textheight}{\paperheight}% texth <= paperh
+\setlength{\topmargin}{-1 in}% tmargin <= 1 in - 1in
+%
+
+% load pdfpages for including summary pages
+\usepackage{pdfpages}
+
+% default to empty page style
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+% fix page ranges to fit to your thesis and abstract vs. tiivistelm�
+\includepdf[pages=2-2]{gradu.pdf}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
