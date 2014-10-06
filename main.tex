@@ -119,6 +119,25 @@
 %   � additional defines and stuff
 \usepackage{itpackage}
 
+\usepackage{setspace}
+
+\usepackage{listings}
+\lstset{
+    basicstyle=\small\ttfamily\singlespacing,
+    numbers=left,
+    numberstyle=\tiny,
+    frame=tb,
+    columns=fullflexible,
+    showstringspaces=false
+}
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  sensitive=true
+}
 % uncomment the following snippet to get rid of Luku/Chapter text at the
 % beginning of each Chapter... 
 %\makeatletter
