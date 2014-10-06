@@ -1,1 +1,75 @@
 \chapter{Programming Web Applications}
+
+\section{A Brief Introduction to the Web}
+
+The World Wide Web, or the Web for short, is a massive distributed information system in the Internet. It constitutes a large set of interlinked \emph{hypertext documents}, accessed using special browser software.
+
+The Web project was initiated by the British computer scientist Timothy Berners-Lee while working at the European Organization for Nuclear Research, or \textsc{cern}, in the late 1980s and early 1990s. His original aim was to improve the information sharing between scientists, but the Web soon expanded to more general use.
+
+Hypertext, one of the central concepts of the Web, refers to electronic documents linked to other documents via embedded references called hyperlinks. An early vision of the concept was presented in the seminal 1945 essay \emph{As We May Think} by Vannevar Bush. In the 1960s, the term ``hypertext'' was coined by Ted Nelson, and a working hypertext system was showcased by Douglas Engelbart in the famous "Mother of All Demos".
+
+Hypertext documents in the Web are written in \textsc{html} (Hypertext Markup Language) that is based on the older \textsc{sgml} (Standardized General Markup Language). A \textsc{html} document is a structured text file consisting of a hierarchy of nested elements, representing the logical and visual structure of the document. A Web browser interprets the \textsc{html} and renders a graphical representation of it to the user, managing layouting, typesetting, multimedia, and possible interactivity as specified in the document.
+
+The Web is based on a client-server architecture utilizing \textsc{http} (Hypertext Transfer Protocol). A client application, typically a Web browser, connects to a \textsc{http} server, requesting a \emph{resource} such as a Web page, an image, or other type of file. Resources are identified via unique textual identifiers, \textsc{URI}s.
+
+A single server can attend to several clients---constrained by the available resources---but the clients cannot communicate directly with each other. The server must work as a mediator in any client-to-client interaction. Another limitation in the \textsc{http} model is that the server cannot proactively send messages to the clients; it may only respond to requests initiated by them. Furthermore, the protocol is stateless; two consecutive requests by the same user are independent and not associated with the same session without separate bookkeeping.
+
+A Web resource need not be a physical file served from mass storage; the server may instead elect to generate the response partially or fully programmatically. Thus, when reloading a page, its content may change dynamically without manual maintenance. For instance, the server might do a database query and present the results to the client as a \textsc{html} document. In practice, it is useful to modularize a Web server so that it can delegate request handling to a set of subprograms on a request-by-request basis. 
+
+A simple protocol, \emph{Common Gateway Interface} (\textsc{CGI}), was developed to facilitate such delegation from a Web server to an auxiliary program. Early CGI applications were typically written in C or Perl. 
+
+In the early days of the Web, the only form of interaction between the user and the Web server was requesting pages either by typing an explicit \textsc{uri} or following hyperlinks. Use cases soon emerged for the ability for the user to send input data to the server; the latter in turn serving another page based on the user input and possibly save the input to persistent storage for future use. In 1993, Mosaic, one of the first graphical browsers, added to its \textsc{html} dialect a rudimentary set of input elements, including text fields, buttons, and list boxes. These elements were later included in the \textsc{html} 2 standard.
+
+Compared to regular desktop applications, this rudimentary interactivity was rather slow and awkward. To process any user input, the browser would have to send a \textsc{http} request to the server, where it would be processed and a new Web page, generated based on the input, served to the client. Fetching up-to-date content from the server would require the user to manually ask the browser to refresh the page.
+
+For a more fulfilling interaction, a client-side programming model was required. \emph{JavaScript}, an interpreted language executed by the browser, was developed in 1995 by Brendan Eich. It was originally included in the Netscape Navigator browser. The language could be used to dynamically manipulate the document, typically interactively as a response to input events such as mouse clicks and key presses. For security reasons, JavaScript code in a browser is executed in a "sandbox", a secure virtual machine, and the language initially offered practically no access to standard operating system services such as the file system or the network. Partially due to these limitations, client-side scripting was considered by many a novelty at best and a nuisance at worst.
+
+To better utilize the distributed aspect of the Web in client-side programming, a method for making programmatic \textsc{html} requests, without necessitating the reloading the whole page---and losing all client-side state---was required. Such functionality was developed by Microsoft in the late 1990s and became known as Ajax (Asynchronous JavaScript and \textsc{xml}). It is arguable that Ajax was the technology that started the ongoing age of Web applications. Despite the name, \textsc{xml} is not necessarily used as the message format. Again as a security measure, Ajax connections are by default limited to the server from which the page itself was requested.
+
+As the name implies, Ajax requests are \emph{asynchronous}. Because JavaScript programs are single-threaded, they cannot simply wait for the response without pausing user interaction. Instead, the browser initiates the request in the background and notifies the script of its eventual completion.
+
+\emph{\textsc{html} 5} is a common name for various technologies that aim to improve the capabilities and richness of interaction of Web applications. Several of these new features are programming interfaces that expose operating system services to JavaScript in a controlled fashion.
+
+The Web has been transformed from a simple document retrieval system to a full-fledged distributed application platform. Despite their potentially awkward user interfaces, Web applications have several advantages. They do not require a separate installation step, they run on any platform with a modern Web browser, and they are intrinsically network-aware, permitting interaction with not just the server, but also other users connected to the same server.
+
+
+
+\begin{lstlisting}[language=HTML]
+<!DOCTYPE html5>
+<html>
+  <head>
+    <title>Test</title>
+  </head>
+  <body>
+    test
+  </body>
+</html>
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript]
+var btn = document.getElementById("button");
+
+btn.addEventListener("click", function () {
+    alert("Clicked a button!");
+});
+\end{lstlisting}
+
+\section{Web Application Architecture}
+
+\section{User Interface Programming}
+
+\subsection{Widgets}
+
+\subsection{Events and Observers}
+
+\section{Servlets}
+
+\section{Vaadin}
+
+\subsection{Client-Server Architecture}
+
+\subsection{Components}
+
+\subsection{Events}
+
+\subsection{Data Model}
