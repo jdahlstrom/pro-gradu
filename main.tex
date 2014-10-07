@@ -121,6 +121,8 @@
 
 \usepackage{setspace}
 
+\usepackage{url}
+
 \usepackage{listings}
 \lstset{
     basicstyle=\small\ttfamily\singlespacing,
@@ -138,6 +140,12 @@
   morestring=[b]",
   sensitive=true
 }
+
+\usepackage{float}
+
+\floatstyle{plain} % optionally change the style of the new float
+\newfloat{code}{b}{myc}
+
 % uncomment the following snippet to get rid of Luku/Chapter text at the
 % beginning of each Chapter... 
 %\makeatletter
@@ -154,6 +162,13 @@
 %  }}
 %\makeatother
 
+% custom commands
+\newcommand{\ab}[1]{\textsc{#1}}
+
+% ugly, needs another font
+% \newcommand{\num}[1]{\oldstylenums{#1}}
+\newcommand{\num}[1]{#1}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % main document starts here
@@ -167,12 +182,13 @@
 
 %%% fill in your information below
 \workinfo{Johannes Dahlström}
-{Reactive User Interfaces in the Web}
-{First Supervisor}
-{Second Supervisor}
-{2015}
-{Month}
-{Kuukausi} 
+    {Reactive User Interfaces in the Web}
+    {First Supervisor}
+    {Second Supervisor}
+    {2015}
+    {Month}
+    {Kuukausi} 
+    
 % set the type of your thesis (Diplomityö, TkK -tutkielma, etc.) and
 % laboratory or field of study below
 \worktype{M.Sc. Thesis}{Pro gradu} 
