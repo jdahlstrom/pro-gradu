@@ -8,42 +8,41 @@ The Web project was initiated by the British computer scientist Timothy Berners-
 
 Hypertext, one of the central concepts of the Web, refers to electronic documents linked to other documents via embedded references called hyperlinks. An early vision of the concept was presented in the seminal \num{1945} essay \emph{As We May Think} by Vannevar Bush \cite{Bush45}. In the \num{1960s}, the term ``hypertext'' was coined by Ted Nelson, and a working hypertext system was showcased by Douglas Engelbart in the famous "Mother of All Demos".
 
-Hypertext documents in the Web are written in \ab{html} (Hypertext Markup Language), which is based on the older \ab{sgml} (Standardized General Markup Language). A \ab{html} document is a structured text file consisting of a hierarchy of nested elements, representing the logical and visual structure of the document. A Web browser interprets the \ab{html} and renders a graphical representation of it to the user, managing layouting, typesetting, multimedia, and possible interactivity as specified in the document. \cite{HTML20}
+Hypertext documents in the Web are written in \ab{html} (Hypertext Markup Language), which is based on the older \ab{sgml} (Standardized General Markup Language). An \ab{html} document is a structured text file consisting of a hierarchy of nested elements, representing the logical and visual structure of the document. A Web browser interprets the \ab{html} and renders a graphical representation of it to the user, managing layouting, typesetting, multimedia, and possible interactivity as specified in the document. A simple \ab{html} page is shown in Listing~\ref{listing:html}. \cite{HTML20}
 
 \begin{code}
-\label{listing:html}
-\begin{lstlisting}[language=HTML,caption=A small \ab{html} document]
-<!-- TODO This is just a test example -->
-<!DOCTYPE html5>
+\begin{lstlisting}[language=HTML,caption=A small \ab{html} document.\label{listing:html}]
+<!-- Displays a traditional greeting -->
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Test</title>
+    <title>Greetings</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    test
+    <h1>Hello World!</h1>
+    <p>This is a traditional greeting.</p>
   </body>
 </html>
 \end{lstlisting}
 \end{code}
 
-The Web is based on a client-server architecture utilizing the Hypertext Transfer Protocol (\ab{http}). A client application, typically a Web browser, connects to a \ab{http} server, requesting a \emph{resource} such as a Web page, an image, or other type of file. Resources are identified via unique textual identifiers, \ab{uri}s. \cite{HTTP11}
+The Web is based on a client-server architecture utilizing the Hypertext Transfer Protocol (\ab{http}). A client application, typically a Web browser, connects to an \ab{http} server, requesting a \emph{resource} such as a Web page, an image, or other type of file. Resources are identified via unique textual identifiers, \ab{uri}s. \cite{HTTP11}
 
 A single server can attend to several clients---constrained by the available resources---but the clients cannot communicate directly with each other. The server must work as a mediator in any client-to-client interaction. Another limitation in the \ab{http} model is that the server cannot proactively send messages to the clients; it may only respond to requests initiated by them. Furthermore, the protocol is stateless; two consecutive requests by the same user are independent and not associated with the same session without separate bookkeeping.
 
 A Web resource need not be a physical file served from mass storage; the server may instead elect to generate the response partially or fully programmatically. Thus, when a user reloads a Web page, its content may change dynamically without manual maintenance. For instance, the server might do a database query and present the results to the client as a formatted \ab{html} document. In practice, it is useful to modularize a Web server so that it can delegate request handling to a set of subprograms on a request-by-request basis. 
 
-A simple protocol, \emph{Common Gateway Interface} (\ab{cgi}), was developed to facilitate such delegation from a Web server to an auxiliary program. Early \ab{cgi} applications were typically written in C or Perl. For each request, the server would execute the associated \ab{cgi} application as a separate process, passing it details of the request in environment variables. The application would write a \ab{http} response to its standard output stream and the server would send the response to the client. \cite{CGI11}
+A simple protocol, \emph{Common Gateway Interface} (\ab{cgi}), was developed to facilitate such delegation from a Web server to an auxiliary program. Early \ab{cgi} applications were typically written in C or Perl. For each request, the server would execute the associated \ab{cgi} application as a separate process, passing it details of the request in environment variables. The application would write an \ab{http} response to its standard output stream and the server would send the response to the client. \cite{CGI11}
 
 In the early days of the Web, the only form of interaction between the user and the Web server was requesting pages either by typing an explicit \ab{uri} or following hyperlinks. Use cases soon emerged for the ability for the user to send input data to the server; the latter in turn serving another page based on the user input and possibly save the input to persistent storage for future use. In \num{1993}, Mosaic, one of the first graphical browsers, added to its \ab{html} dialect a rudimentary set of input elements, including text fields, buttons, and list boxes. These elements were later included in the \ab{html} 2 standard \cite{HTML20}.
 
 Compared to regular desktop applications, this rudimentary interactivity was rather slow and awkward. To process any user input, the browser would have to send a \ab{http} request to the server, where it would be processed and a new Web page, generated based on the input, served to the client. Fetching up-to-date content from the server would require the user to manually ask the browser to refresh the page.
 
-To achieve more fulfilling interaction, a client-side programming model was necessary. In \num{1995}, Brendan Eich developed the first version of \emph{JavaScript}, an interpreted language executed by the browser. The language could be used to dynamically manipulate the document, typically interactively as a response to input events such as mouse clicks and key presses. For security reasons, JavaScript code in a browser is executed in a "sandbox", a secure virtual machine, and the language initially offered practically no access to standard operating system services such as the file system or the network. Partially due to these limitations, client-side scripting was considered by many a novelty at best and a nuisance at worst.
+To achieve more fulfilling interaction, a client-side programming model was necessary. In \num{1995}, Brendan Eich developed the first version of \emph{JavaScript}, an interpreted language executed by the browser. The language could be used to dynamically manipulate the document, typically interactively as a response to input events such as mouse clicks and key presses. For security reasons, JavaScript code in a browser is executed in a "sandbox", a secure virtual machine, and the language initially offered practically no access to standard operating system services such as the file system or the network. Partially due to these limitations, client-side scripting was considered by many a novelty at best and a nuisance at worst. Listing~\ref{listing:js} exhibits a simple JavaScript program that displays a pop-up dialog as a response to a button click.
 
 \begin{code}
-\label{listing:js}
-\begin{lstlisting}[language=JavaScript,caption=A small JavaScript program]
-// TODO This is just a test example
+\begin{lstlisting}[language=JavaScript,caption=A small JavaScript program.\label{listing:js}]
 var btn = document.getElementById("button");
 
 btn.addEventListener("click", function () {
@@ -52,67 +51,189 @@ btn.addEventListener("click", function () {
 \end{lstlisting}
 \end{code}
 
-To better utilize the distributed aspect of the Web in client-side programming, a method for making programmatic \ab{html} requests, without necessitating the reloading of the whole page---and losing all client-side state---was required. Such functionality was developed by Microsoft in the late \num{1990s} and became known as Ajax (Asynchronous JavaScript and \ab{xml}). It is arguable that Ajax was the technology that started the ongoing age of Web applications.
+To better utilize the distributed aspect of the Web in client-side programming, a method for making programmatic \ab{html} requests, without necessitating the reloading of the whole page---and losing all client-side state---was required. Such functionality was developed by Microsoft in the late \num{1990s} and became known as \emph{Ajax} (Asynchronous JavaScript and \ab{xml}). It is arguable that Ajax was the technology that started the ongoing age of Web applications.
 
-As the name implies, Ajax requests are \emph{asynchronous}. Because JavaScript programs are single-threaded, they cannot simply wait for the response without pausing user interaction. Instead, the browser initiates the request in the background and notifies the script of its eventual completion. As a security measure, Ajax connections can, by default, only be made to the server from which the JavaScript code itself was requested.
+As the name implies, Ajax requests are \emph{asynchronous}: the browser initiates the request in the background and notifies the script of its eventual completion. As a security measure, Ajax connections can, by default, only be made to the server from which the JavaScript code itself was requested.
 
-\ab{html} 5 is a common name for various technologies that aim to improve the capabilities and richness of interaction of Web applications. Several of these new features are programming interfaces that expose operating system services to JavaScript in a controlled fashion, including persistent storage, networking, and accelerated 3D graphics. \cite{HTML5}
+\emph{\ab{html}~5} is a common name for various technologies that aim to improve the capabilities and richness of interaction of Web applications. Several of these new features are programming interfaces that expose operating system services to JavaScript in a regulated fashion, including persistent storage, networking, and accelerated 3D graphics. \cite{HTML5}
 
-The Web has been transformed from a simple document retrieval system to a full-fledged distributed application platform. Despite their potentially awkward user interfaces, Web applications have several advantages. They do not require a separate installation step, they run on any platform with a modern Web browser, and they are intrinsically network-aware, permitting interaction with not just the server, but also with other users connected to the same server. While historically user interactions in the Web may have had a latency of several seconds, with modern Web technologies even highly interactive applications such as fast-paced multiplayer computer games are feasible.
+The Web has been gradually transformed from a simple document retrieval system to a full-fledged distributed application platform. Despite their potentially awkward user interfaces, Web applications have several advantages. They do not require a separate installation step, they run on any platform with a modern Web browser, and they are intrinsically network-aware, permitting interaction with not just the server, but also with other users connected to the same server. While historically user interactions in the Web may have had a latency of several seconds, with modern Web technologies even highly interactive applications such as fast-paced multi-player computer games are feasible. \footnote{As an anecdote, this thesis was written in part using the \textsc{Share\LaTeX} service at \url{http://www.sharelatex.com}.}
 
 \section{Web Application Architecture}
 
-In short, a Web application is a program accessed with a Web browser or a specialized \ab{http} client. \ab{html} pages, either computer-generated or hand-written, are used to present a graphical interface to the user, and \ab{http} requests are utilized to transmit information between the client and the server as necessary. JavaScript is used to provide low-latency interactivity in the browser, and there has been a constant push to move more and more application logic to the client side. Consequently, there has been a rising demand to improve the performance capabilities of JavaScript programs, and browser vendors have responded to that demand.
+In short, a Web application is a program accessed with a Web browser or a specialized \ab{http} client. \ab{html} pages, either computer-generated or hand-written, are used to present a graphical interface to the user, and \ab{http} requests are utilized to transmit information between the client and the server as necessary. JavaScript is used to provide low-latency interactivity in the browser, and there has been a constant push to move more and more application logic to the client side. Consequently, there has been a rising demand to improve the performance and capabilities of JavaScript programs, and browser vendors have responded to that demand.
 
 \subsection{Communication}
 
-\ab{http}, the protocol underlying the Web, is request-oriented and stateless. For the original use case of document retrieval this was more than sufficient, but issues arise when it is attempted to use as the communication protocol of a distributed application.
+\ab{http}, the protocol underlying the Web, is \emph{request-oriented} and \emph{stateless}. For the original use case of document retrieval this was more than sufficient, but issues arise when it is attempted to use as the communication protocol of a distributed application.
 
--Synchronous request/response
+As a request-oriented, or request-response protocol, \ab{http} connections have a transient nature. A client establishes a network connection to the server and sends a request message specifying the \ab{url} of the resource it wants to fetch, as well as auxiliary information in the form of request headers. The server procures the requested resource, provided one is available, and sends it back to the client along with response headers. After this, the request is complete and the connection closed. Listings \ref{listing:http-request} and \ref{listing:http-response} give examples of an \ab{http} request and response, respectively. \cite{HTTP11}
 
--Ajax async request/response
+\begin{code}
+\begin{lstlisting}[breaklines,caption=A typical \ab{http} request.\label{listing:http-request}]
+GET /index.html HTTP/1.1
+Host: www.example.com
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+\end{lstlisting}
+\end{code}
 
--Polling
+\begin{code}
+\begin{lstlisting}[breaklines,caption=A typical \ab{http} response.\label{listing:http-response}]
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Content-Type: text/html
+Content-Length: 45
+Server: Apache 2.4.1
 
--Push: Comet, Websocket
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Hello</h1>
+  </body>
+</html>
+\end{lstlisting}
+\end{code}
+
+Besides not keeping a connection open, by default an \ab{http} server does not even keep track of whether two separate requests belong to the same logical user session. Indeed, in the traditional \ab{cgi} approach, the server would spawn a new instance of the \ab{cgi} program for each handled request; the instance would execute, generate a response, and then halt. Any request-to-request state would have to be saved in a persistent storage such as the file system or a database.
+
+Session tracking between requests can be implemented using \emph{cookies}, short textual data coupled with an expiration date that are passed between the server and the client. A cookie sent by the server is stored by the client and included in all subsequent requests to the same server until it expires. Simple state can be encoded directly in the cookie, but a more common approach is to persist session state on the server side and simply share a session identifier with the client. \cite{HTTPState}
+
+The bulk of the client-server communication in a modern Web application is done using Ajax requests. Before Ajax, the only ways to do a \ab{http} request in a browser were navigating to a \ab{url} either by entering it manually or clicking a link, or submitting an \ab{html} form; the latter would typically load a new page as well. A full page load disrupts user interaction and loading and rendering the page takes time. Furthermore, the state of any JavaScript programs on the page is lost. With Ajax, it is possible to communicate with the server in the background, maintaining interactivity and the state of the user interface. 
+
+Because JavaScript programs are single-threaded, an Ajax request cannot simply block until the request is complete without preventing user interaction during that time. Instead, a \emph{callback} function is associated with the request, invoked by the browser at certain stages of the request handling. In most cases, only the last stage---response received---is of interest. Listing~\ref{listing:ajax} demonstrates the making of an Ajax request and its asynchronous completion.
+
+An important limitation of Ajax requests is that they are subject to a security measure called the \emph{same-origin policy}. This prevents a JavaScript program from connecting to servers other than the one from which the script was loaded. Cross-origin resource sharing (\ab{cors}) is a mechanism developed to selectively loosen this restriction.
+
+\begin{code}
+\begin{lstlisting}[language=JavaScript,caption=Making an Ajax request.\label{listing:ajax}]
+var request = new XMLHttpRequest();
+request.onreadystatechange = function() {
+    if(request.readystate == 4) {
+        // Response received
+        if(request.status == 200) {
+            handleResponse(request.response);
+        } else {
+            signalFailure();
+        }
+    }
+};
+request.open("GET", "http://www.example.com");
+request.send(); // Returns immediately
+\end{lstlisting}
+\end{code}
+
+Since it is not possible for an \ab{http} server to initiate communication with the client, \emph{polling} must be used if the client wishes to keep informed of possible changes occurring on the server. Often this is done manually by the user; sometimes JavaScript or special \ab{html} tags would be used to reload the page periodically. A sudden unexpected reload will typically not make the user very happy, however. Ajax requests can be used to poll the server and partially update the page contents without overly distracting the user. If state changes on the server are irregular, frequent polling may lead to a large number of superfluous requests. On the other hand, polling more infrequently leads to increased latency in delivering the updates to the client.
+
+Several mechanisms have been developed to facilitate a more flexible way of server-to-client communication, often called \emph{server push}. As opposed to the client \emph{pulling} content from the server, the server is pushing data to the client when needed. Some push mechanisms utilize \ab{http} requests that are purposely kept open for longer than what is typical; the response is not sent until the server wishes to notify the client of some event. These techniques are, out of necessity, somewhat haphazard and \emph{ad hoc} in nature, and may not work reliably in an environment that expects \ab{http} requests to behave in a traditional manner.
+
+\emph{WebSocket} is a recent technology, part of the \ab{html}~5 family of Web standards, aiming to improve the networking capabilities of Web applications. In particular it can be used to implement an efficient and reliable server push mechanism. WebSocket connections are persistent, bidirectional, and impose considerably less overhead than \ab{http}. They are also not subject to the same-origin policy.
 
 \subsection{Single-page Web Applications}
 
--Only one, initial, full page load
+Traditional Web sites are composed of multiple pages, between which the user navigates via hyperlinks. In contrast, many modern Web applications have embraced a single-page architecture, where most or all content changes are done programmatically by manipulating a single \ab{html} page. These are called, fittingly enough, \emph{single-page Web applications}.
 
 -Initial page fully created on server, or bootstrapped with JS
 
--UI events cause Ajax requests, server replies with page fragments or instructions controlling JS
+-Rich Internet Applications - rich JavaScript UIs
 
--Push
+-UI events cause Ajax requests
 
-\subsection{Model-View-Controller}
+- Server replies with page fragments or instructions controlling JS
 
 \section{User Interface Programming}
 
+- Text-based vs graphical
+
+- interactive applications react to input, typically wait most of the time
+
+The computer mouse and first mouse-based interfaces were developed by a team led by Douglas Engelbart at the Stanford Research Institute in the \num{1960s}. Graphical user interfaces were pioneered by Xerox in the \num{1970s}.
+
+-Mobile interfaces: touch instead of mouse, small screens
+
 \subsection{Widgets}
 
--User interface elements
+A typical graphical user interface consists of a visual hierarchy of rectangular display elements, variously called controls, components, or \emph{widgets}. Widgets are usually reusable; their behavior can be customized so that, for instance, clicking two different buttons may have entirely distinct effects.
 
--Basic division: layout and input
+Widgets can be loosely classified into three types: \emph{layout widgets}, \emph{output widgets}, and \emph{input widgets}. Layout widgets are used to visually group other widgets in order to visually indicate to the user their significance and logical relationships. Layouts can typically be nested. Output widgets are concerned with presenting data---textual, numeric, audiovisual or other---and input widgets allow user to enter input data.
 
--Layouts have children, forming a tree
-
--
+A core set of widget types has existed since the days of the Xerox Alto. These include windows, labels, push buttons, dropdown menus, and list boxes. (...)
 
 \subsection{Events and Observers}
 
 -Event loop
 
--Observer pattern
+-Observer pattern \cite{GoF}
 
-\section{Servlets}
+-Listing \ref{listing:observer}
+
+\begin{code}
+\begin{lstlisting}[language=Java,caption=An implementation of the observer pattern.\label{listing:observer}]
+interface Subject {
+    void addObserver(Observer);
+    void removeObserver(Observer);
+}
+
+interface Observer {
+    void notify();
+}
+
+class ConcreteSubject implements Subject {
+    private Collection<Observer> observers = 
+        new ArrayList<>();
+
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+    
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+    
+    protected void notifyObservers() {
+        for(Observer o : observers) {
+            o.notify();
+        }
+    }
+}
+
+
+\end{lstlisting}
+\end{code}
+
+\subsection{Model-View-Controller}
+
+In adherence to the well-established design principles of modularity and separation of concerns, when programming interactive applications it is often desirable to make a clear distinction between the user interface and the underlying data model manipulated via that interface. A common way to structure an application in this manner is the \emph{Model-View-Controller} (\ab{mvc}) pattern. It divides the architecture of an application into three distinct layers, each having well-defined responsibilities:
+
+\begin{itemize}
+
+    \item The Model layer is concerned with the data model, its integrity, constraints and validation of data, and its storage into and retrieval from an underlying persistence mechanism such as a relational database.
+    
+    \item The View layer implements the user interface, fetching data from the model and displaying it to the user. (...)
+    
+    \item Finally, the Controller concerns itself with handling user input, modifying the model and changing the view appropriately. (...)
+
+\end{itemize}
+
+
+
+
+
+There are several variations of \ab{mvc}, such as Model-View-Adapter and Model-View-Presenter. In the former, instead of the view directly fetching data from the model, the controller (now called adaptor) mediates all interaction between the other two layers. In the latter, user interaction logic is pushed from the view to a presenter layer, making the view itself simply a passive conduit of input and output.
+
+A closely related concept in client-server programming is \emph{multitier architecture}. (...)
+
+In a Web application, each of the layers can straddle the client-server division. (...)
 
 \section{Vaadin}
 
-Vaadin is a Web application framework written in Java that aims to make the design and maintenance of high-quality Web-based user interfaces easy. It attempts to abstract away many of the more inconvenient aspects of the Web platform, trying to provide an experience similar to that offered by traditional desktop user interface frameworks.
-
--Abstract away client whenever feasible
+Vaadin is a Web application framework written in Java that aims to make the design and maintenance of high-quality Web-based user interfaces easy. It attempts to abstract away many of the more inconvenient aspects of the Web platform, trying to provide an experience similar to traditional desktop application programming.
 
 -Client access is there if needed
 
@@ -122,19 +243,49 @@ Vaadin is a Web application framework written in Java that aims to make the desi
 
 -Events and updates transmitted automatically
 
+\begin{code}
+\begin{lstlisting}[language=Java,caption=A simple Vaadin application.\label{listing:vaadin-ui}]
+public class HelloUI extends UI {
+
+    protected void init(VaadinRequest request) {
+        VerticalLayout layout = new VerticalLayout();
+        Button button = new Button("Click me!", clickEvent -> {
+            Notification.show("Clicked!");
+        });    
+        layout.addComponent(button);
+        setContent(layout);
+    }
+}
+\end{lstlisting}
+\end{code}
+
 \subsection{Architecture}
 
 -GWT
 
--Clientside counterparts for server-side components maintained automatically
+-Compile Java to JavaScript
+
+-Partial implementation of Java Standard Library in addition to Java APIs for JS/DOM stuff
+
+-Clientside counterparts for server-side components created and maintained automatically
+
+\subsection{Communication}
 
 -Ajax or push
 
 -Shared state and RPC
 
+-Widgets have state that can only be changed by the server, changes sent to client
+
+-Client can make remote procedure calls to server to notify about events, request more data etc
+
+-Server can make RPCs to client
+
 \subsection{Component Model}
 
--Basic observer pattern
+-Fairly standard collection of widgets, called components
+
+-Basic observer pattern for event handling
 
 \subsection{Data Model}
 
@@ -142,11 +293,18 @@ Vaadin is a Web application framework written in Java that aims to make the desi
 
 -Data source can be memory, DB, Web service, ...
 
+-Container, Item, Property
+
+-"Smart" wrappers for data
+
 -Bidirectional propagation of change
+
+-Based on observer pattern
 
 -Converters
 
+-Validators
+
 -Transactionality
 
--Based on observer pattern
 
