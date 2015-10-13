@@ -63,7 +63,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % document is based on report class
-\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,12pt,fleqn]{report}
 
 % load ams-packages for maths
 \usepackage{amssymb,amsthm,amsmath}
@@ -141,26 +141,34 @@
   sensitive=true
 }
 
+\usepackage{caption}
+\captionsetup[lstlisting]{
+    singlelinecheck=off,
+    justification=raggedright
+}
+
 \usepackage{float}
 
 \floatstyle{plain} % optionally change the style of the new float
-\newfloat{code}{b}{myc}
+\newfloat{code}{htb}{myc}
 
 % uncomment the following snippet to get rid of Luku/Chapter text at the
 % beginning of each Chapter... 
-%\makeatletter
-%\renewcommand{\@chapapp}{\relax}
-%\renewcommand{\@makechapterhead}[1]{%
-%  \vspace*{50\p@}%
-%  {\parindent \z@ \raggedright \normalfont
-%    \ifnum \c@secnumdepth >\m@ne
-%        \huge\bfseries \@chapapp\space \thechapter\space\space
-%    \fi
-%    \interlinepenalty\@M
-%    \Huge \bfseries #1\par\nobreak
-%    \vskip 40\p@
-%  }}
-%\makeatother
+\makeatletter
+\renewcommand{\@chapapp}{\relax}
+\renewcommand{\@makechapterhead}[1]{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+     \huge\bfseries \@chapapp\space \thechapter\space\space
+    \fi
+    \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother
+
+\interfootnotelinepenalty=10000
 
 % custom commands
 \newcommand{\ab}[1]{\textsc{#1}}
@@ -182,16 +190,16 @@
 
 %%% fill in your information below
 \workinfo{Johannes Dahlström}
-    {Reactive User Interfaces in the Web}
-    {First Supervisor}
-    {Second Supervisor}
-    {2015}
-    {Month}
-    {Kuukausi} 
+    {Reactive User Interfaces with Vaadin}
+    {}
+    {}
+    {2016}
+    {(Month)}
+    {(Kuukausi)} 
     
 % set the type of your thesis (Diplomityö, TkK -tutkielma, etc.) and
 % laboratory or field of study below
-\worktype{M.Sc. Thesis}{Pro gradu} 
+\worktype{Thesis for Degree of Master of Science}{Pro gradu} 
 \deptinfo{Computer Science}{Tietojenkäsittelytiede}
 
 
@@ -199,14 +207,12 @@
 \gentitle
 
 % generate tiivistelma 
-\begin{ittiivis}{tähän, lista, avainsanoista}
-Tarkempia ohjeita tiivistelmäsivun laadintaan löytyy opiskelijan
-yleisoppaasta, josta alla lyhyt katkelma.
+\begin{ittiivis}{Vaadin, web, reaktiivinen ohjelmointi, käyttöliittymät}
+    \input{abstract-fi.tex}
 \end{ittiivis}
 
-% if your thesis is in english then this is also required (is it???)
-\begin{itabstract}{list, of, keywords}
-If your thesis is in english this might also be required???
+\begin{itabstract}{Vaadin, web, reactive programming, user interfaces}
+    \input{abstract-en.tex}
 \end{itabstract}
 
 
@@ -233,12 +239,12 @@ If your thesis is in english this might also be required???
 %
 %\setcounter{page}{0}
 \tableofcontents
-\clearpage
+%\clearpage
 %\setcounter{page}{0}
-\listoffigures 
-\clearpage
+%\listoffigures 
+%\clearpage
 %\setcounter{page}{0}
-\listoftables
+%\listoftables
 
 % possibly insert 'list of acronyms'
 %
@@ -268,10 +274,11 @@ If your thesis is in english this might also be required???
 
 \input{1-introduction.tex}
 \input{2-web-apps.tex}
-\input{3-reactive.tex}
-\input{4-case-study.tex}
-\input{5-validation.tex}
-\input{6-conclusions.tex}
+\input{3-vaadin.tex}
+\input{4-reactive.tex}
+\input{5-case-study.tex}
+\input{6-validation.tex}
+\input{7-conclusions.tex}
 
 % insert references
 %  � included unsrtf.bst provides finnish language version of unsrt

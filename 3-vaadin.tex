@@ -1,0 +1,114 @@
+\chapter{Vaadin}
+
+Vaadin is a Web application framework written in Java that aims to make the design and maintenance of high-quality Web-based user interfaces easy. It attempts to abstract away many of the more inconvenient aspects of the Web platform, trying to provide an experience similar to traditional desktop application programming.
+
+-Client access is there if needed
+
+-Recognized that the abstraction is leaky
+
+-Write server-side \ab{ui} code, client side rendered automatically
+
+-Events and updates transmitted automatically
+
+\begin{code}
+\begin{lstlisting}[language=Java,caption=A simple Vaadin application.\label{listing:vaadin-ui}]
+public class HelloUI extends UI {
+
+    protected void init(VaadinRequest request) {
+        VerticalLayout layout = new VerticalLayout();
+        Button button = new Button("Click me!", clickEvent -> {
+            // Display a floating notification
+            // each time the button is clicked
+            Notification.show("Clicked!");
+        });    
+        layout.addComponent(button);
+        setContent(layout);
+    }
+}
+\end{lstlisting}
+\end{code}
+
+\section{Background}
+
+The origins of Vaadin trace back to the year 2000 when a group of experienced Web developers based in Turku founded the company \ab{it} Mill. The objective of the team was to build a tool that would 
+
+-Millstone
+
+In 2006, the toolkit had a major rewrite as the client-server communication was changed to use \ab{ajax} requests
+
+-IT Mill Toolkit 5
+
+Toolkit version 5, released at the end of 2007, contained a completely rewritten client side based on Google Web Toolkit (\ab{gwt}). \ab{Gwt} is a set of libraries and a Java-to-JavaScript compiler (or "transpiler") that allows writing browser-based applications in plain Java. This enables experienced server-side Java programmers to also be productive writing client-side code when needed.
+
+
+-Vaadin 6
+
+IT Mill Toolkit was re-branded as Vaadin in 2009. Shortly thereafter the company itself was also renamed Vaadin for branding purposes.
+
+-Vaadin 7
+
+Vaadin 7 was again a major upgrade that modernized many aspects of the framework, removing legacy code and revamping the communication layer. The client-side architecture was also greatly improved by logically separating \ab{ui} components (widgets) from the client-server communication logic, allowing the widgets, in principle, to be used in pure \ab{gwt} applications.
+
+Unless otherwise specified, all information in the subsequent sections pertains to Vaadin 7.5, the most recent non-maintenance release at the time of writing.
+
+\section{Architecture}
+
+\subsection{Google Web Toolkit}
+
+Google Web Toolkit, or \ab{gwt} for short, is a Web technology that enables writing browser-based applications in Java instead of JavaScript. It constitutes a set of Java libraries wrapping native JavaScript \ab{api}s, a partial implementation of the Java standard library, and a compiler for translating Java to JavaScript. It was originally developed by Google for internal use; the first public release was in May 2006. \ab{Gwt} is licenced under the Apache 2 licence.
+
+The \ab{gwt} 
+
+\ab{ui} components in \ab{gwt} are called \emph{widgets}.
+
+\subsection{Communication}
+
+Vaadin is based on the Servlet technology, the standard for writing web applications in Java. Each 
+
+-ajax or push
+
+By default all communication between the client and the server occurs over \ab{http}. Asynchronous (\ab{ajax}) requests are used to transmit notifications of user actions to the server and to convey consequent changes to the application state back to the client. There are two primary mechanisms of communication provided for components: \emph{shared state} and \emph{\ab{rpc} invocations}. Shared state is component state that should be known to both the client and the server, and synchronized whenever the server-side state changes. It is read-only on the client. \ab{rpc} (remote procedure call) is a mechanism for invoking selected methods on the other endpoint over the network. Its main use is notifying the server of client-side events, but the server can also make \ab{rpc} calls to the client in cases it feels more natural than using the shared state.
+
+Both shared state and \ab{rpc} invocations are serialized and transmitted as \ab{json} strings.
+
+\subsection{Component Model}
+
+User interface components in Vaadin are called simply \emph{components}. Every component implements the interface \texttt{com.vaadin.Component}.
+
+The root component containing all other components in a Vaadin application instance is called a UI, represented by class \texttt{com.vaadin.UI}. A Vaadin UI may encompass a complete Web page or be embedded within content not controlled by Vaadin. A user may have a Vaadin application open in multiple browser windows concurrently; each corresponds to a separate UI instance.
+
+Vaadin has a straightforward implementation of the Observer pattern to handle user interaction. The observers are called \emph{(event) listeners} and the subjects \emph{(event) notifiers}.
+
+Each Vaadin server-side component class has a widget counterpart on the client side. Each component also has a corresponding \emph{connector} class, used as a bridge between the client-side widget and the server-side component class. The connector typically listens to events emitted by the widget and notifying the server accordingly. When the state of the server-side component changes, the connector receives a notification and synchronizes the widget state. This makes it possible to adapt widgets designed for pure \ab{gwt} for Vaadin use, and vice versa - use Vaadin widgets in plain client-side \ab{gwt} applications.
+
+When a component is added to the UI on the server side, the change is automatically communicated to the client. The client creates an instance of the corresponding connector class, which in turn is responsible for creating a widget of a correct type. 
+
+\subsection{Data Model}
+
+-"Smart" wrappers for data
+
+-Bind fields to data
+
+In addition to setting and querying the value of Vaadin field components explicitly, any field instance may be assigned a \emph{data source}, an instance of interface \texttt{com.vaadin.data.Property}. It is an object that wraps a value and notifies any registered listeners whenever the value is changed.
+
+-Container, Item, Property
+
+A container constitutes a set of items, and an item is composed of a set of properties.
+
+-Data source can be memory, DB, Web service, ...
+
+The Container abstraction is designed to hide the underlying storage mechanism - it might be a Java \texttt{Collection} object, a relational database
+
+-Validators
+
+-Bidirectional propagation of change
+
+-Transactionality
+
+Fields also propagate user input back to their data source. The input is first passed through zero or more \emph{validators}, all of which must agree that the value is valid before it can be committed. If the input does not validate, any validation errors are reported to the user. If a field is \emph{buffered}, its value must be explicitly committed to the data source. Otherwise, the value is propagated automatically.
+
+-Based on observer pattern
+
+-Converters
+
+Fields and properties are parameterized by their value type. If the value type of a field and its data source differs, a \emph{converter} can be used to convert values between the types.
