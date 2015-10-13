@@ -54,19 +54,19 @@
 \setlength{\marginparsep}{0mm}
 \setlength{\marginparwidth}{0mm}
 \setlength{\textwidth}{\paperwidth}
-\addtolength\textwidth{-60 mm}
+\addtolength\textwidth{-45 mm}
 \setlength{\oddsidemargin}{-1 in}
-\addtolength\oddsidemargin{40 mm}
+\addtolength\oddsidemargin{25 mm}
 %
 % page height... textheight starts at ~4cm from top, 
 % i.e. 1 in + 12 pt + 24 pt = 1.5 in 
 %
-\setlength{\voffset}{0 mm}
-\setlength{\topmargin}{0 mm}
+\setlength{\voffset}{-1 in}
+\setlength{\topmargin}{15 mm}
 \setlength{\headheight}{12 pt}
 \setlength{\headsep}{24 pt}
-\setlength{\textheight}{230mm}
-\setlength{\footnotesep}{12 pt}
+\setlength{\textheight}{250mm}
+\setlength{\footnotesep}{18 pt}
 
  
 % setup linespacings to suit to the (stupid) requirement of double spacing
@@ -165,24 +165,23 @@
 \\
 \renewcommand{\baselinestretch}{1}\normalsize
  \iffin
- \begin{tabular}{p{80 mm}p{70 mm}}           \\
- &
- \usebox{\wtfi}                              \\
- & Turun yliopisto                           \\
- & Informaatioteknologian laitos             \\
+  \begin{tabular}{p{80 mm}p{70 mm}}           \\
+  & \usebox{\eauthor}                         \\
+  & \\
+  & \usebox{\wtfi}                              \\
+  & \usebox{\difi}                              \\
+  & Informaatioteknologian laitos             \\
+  & Turun yliopisto                           \\
  \else
-\begin{tabular}{p{78 mm}p{72 mm}}            \\
- & \usebox{\wt}                              \\
- & University of Turku                       \\
- & Department of Information Technology      \\
- \fi
- & \iffin
- \usebox{\difi}                              \\
- \else
- \usebox{\di}                                \\
+  \begin{tabular}{p{78 mm}p{72 mm}}            \\
+  & \usebox{\eauthor}                         \\
+  & \\
+  & \usebox{\wt}                              \\
+  & \usebox{\di}                                \\
+  & Department of Information Technology      \\
+  & University of Turku                       \\
  \fi
  & \usebox{\eyear}                           \\
- & \usebox{\eauthor}                         \\
  &                                           \\
 \iffin
  & Tarkastajat:                              \\ 
