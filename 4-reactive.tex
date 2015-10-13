@@ -1,18 +1,313 @@
 \chapter{Reactive Programming}
 
+Reactive programming refers to a class of related programming patterns that are centered on the concept of propagating change.
+
+\section{Functional Programming Basics}
+
+Functional programming is a programming paradigm that XXX.
+
+\subsection{Purity and immutability}
+
+A function is said to be \emph{pure} if it has no side effects and its return value only depends on its argument values. A very desirable property of pure functions is \emph{referential transparency}: any expression involving only calls to pure functions can always be replaced by the evaluated value of the expression independent of its context.
+
+\subsection{Lists}\label{react.func.lists}
+
+The most fundamental data structure in functional programming is the immutable \emph{list}. A list is typically recursively defined as either the \emph{empty list} $\emptyset$ or a pair $(x : xs)$ composed of a value $x$ (the \emph{head} of the list) and another list $xs$ (the \emph{tail} of the list). The list constructor $(\cdot : \cdot)$ is generally understood to be right associative \eqref{list.cons}.
+
+\begin{equation}\label{list.cons}
+(x_1, x_2, x_3, \dots, x_n) \equiv x_1 : x_2 : x_3 : \dots : x_n : \emptyset \equiv x_1 : (x_2 : (x_3 : \dots : (x_n : \emptyset)))
+\end{equation}
+
+The recursive structure of a list makes it straightforward to recursively traverse.
+
+\subsection{Lazy evaluation}
+
+\subsection{Pattern matching}
+
+%------------------
+\subsection{Monads}
+%------------------
+
+A \emph{monad} is a structure that, in a sense, abstracts out the concept of sequencing, or chaining, computations on values in pure functional programming. 
+
+The concept of a monad was originally adopted from category theory to pure functional programming language Haskell to represent \ab{i/o} while keeping the language pure and free of side effects.
+
+Formally, a monad is a type with a type constructor and two associated operations, \emph{unit} \eqref{unit.type} and \emph{bind} \eqref{bind.type}. \footnote{The symbol $::$ should be read ``has type''.}
+
+\begin{align}
+& \text{unit} :: t \to M(t) \label{unit.type} \\
+& \text{bind} :: (M(t), t \to M(u)) \to M(u) \label{bind.type}
+\end{align}
+
+The unit operation simply wraps a value in an instance of the monadic type.
+
+-Operations: bind and return
+
+-Alternatively: flatten and map $\to$ flatMap
+
+In addition, for a monad have the expected semantcs, the definitions of unit and bind must obey certain axioms. These identities are usually called the \emph{monad laws}.\footnote{The $\equiv$ symbol should be read ``is semantically equivalent to''.}
+
+\begin{align}
+& \text{bind}(\text{unit}(x), f) \equiv f(x) \\
+& \text{bind}(m, \text{unit}) \equiv m \\
+& \text{bind}(\text{bind}(m, f), g) \equiv (x) \to bind(f(x), g)
+\end{align}
+
+\subsubsection{The Maybe Monad}
+%---------------------------
+
+Many programming languages have the concept of a \emph{null value}. The value null is a placeholder signifying ``no value''; typically trying to use null where a value is expected results in an error raised by the runtime.
+
+Perhaps the simplest useful example of a monad is the \emph{Maybe type}, also known as \emph{Option} or \emph{Optional}. It represents an optional value: a container that may either contain a single value or nothing at all. These two cases are often called \emph{Some} and \emph{None}, respectively. The bind and unit operations are defined in \ref{maybe.unit} and \ref{maybe.bind}.
+
+\begin{align}
+& \text{unit}(x) = \text{Some}(x) \label{maybe.unit} \\
+\begin{split} \label{maybe.bind}
+& \text{bind}(m, f) = m \textbf{ match} \\
+& \quad \textbf{case } \text{None} \Rightarrow \text{None} \\
+& \quad \textbf{case } \text{Some}(x) \Rightarrow f(x) \\
+\end{split}
+\end{align}
+
+The \texttt{bind} operation allows us to compose functions that take plain values and return Maybes
+
+\begin{align}
+\begin{split}
+& x \textbf{ match} \\
+& \quad \textbf{case } None \Rightarrow None \\
+& \quad \textbf{case } Some(x) \Rightarrow foo(x) \textbf{ match} \\
+& \quad\quad \textbf{case } \text{None} \Rightarrow None \\
+& \quad\quad \textbf{case } \text{Some}(x) \Rightarrow bar(x) \\
+& \quad\quad\quad \textbf{case } \text{None} \Rightarrow None \\
+& \quad\quad\quad \textbf{case } \text{Some}(x) \Rightarrow baz(x) \\
+\end{split}
+\end{align}
+
+\begin{equation}
+\text{bind}(\text{bind}(\text{bind}(x, \text{foo}), \text{bar}), \text{baz})
+\end{equation}
+
+\begin{equation}
+x \gg= \text{foo} \gg= \text{bar} \gg= \text{baz}
+\end{equation}
+
+\begin{code}
+\begin{lstlisting}[language=Scala]
+for {
+    y <- foo(x)
+    z <- bar(y)
+    w <- baz(z)
+} yield w
+
+x.flatmap(foo).flatmap(bar).flatmap(baz)
+\end{lstlisting}
+\end{code}
+
+%-----------------------------
+\subsubsection{The List Monad}
+%-----------------------------
+
+The list data structure introduced in subsection \ref{react.func.lists} also forms a monad with definitions \ref{list.unit} and \ref{list.bind}.
+
+\begin{align}
+& \text{unit}(x) = [x] \label{list.unit}\\
+\begin{split} \label{list.bind}
+& \text{bind}(m, f) = m \textbf{ match} \\
+& \quad\quad \textbf{case } \emptyset \Rightarrow \emptyset \\
+& \quad\quad \textbf{case } x : xs \Rightarrow f(x) + \text{bind}(xs, f)
+\end{split}
+\end{align}
+
+The implementation of unit is intuitive; it simply wraps the value in a single-element list. Bind, however, is more interesting.
+
+%------------------
+\subsection{Combinators and Higher-Order Functions}
+%------------------
+
+A \emph{higher-order function} is a function that either takes one or more functions as arguments or returns a function as its result. All other functions are called \emph{first-order functions}.
+
+Some of the most well-known higher-order functions are the list combinators \texttt{map}, \texttt{filter}, and \texttt{reduce}.
+
+\subsubsection{Map}
+%------------------
+
+The \texttt{map} combinator applies a function to each element of a list, returning a new list containing the return values \eqref{map.defn}.
+
+\begin{equation}
+\label{map.defn}
+\begin{split}
+& \text{map} :: ((A \to B), [A]) \to [B] \\
+& \text{map}(f, \emptyset) = \emptyset \\
+& \text{map}(f, x:xs) = f(x):\text{map}(f, xs)
+\end{split}
+\end{equation}
+
+\subsubsection{Filter}
+%---------------------
+
+The \texttt{filter} combinator applies a predicate (a boolean-valued function) to each list element, returning a list of only those elements for which the predicate returned \texttt{true} \eqref{filter.defn}.
+
+\begin{equation}
+\label{filter.defn}
+\begin{split}
+& \text{filter} :: ((A \to Boolean), [A]) \to [A] \\
+& \text{filter}(p, \emptyset) = \emptyset \\
+& \text{filter}(p, x:xs) = \textbf{ if } p(x) \textbf{ then } x:\text{filter}(p, xs) \textbf{ else } \text{filter}(p, xs)
+\end{split}
+\end{equation}
+
+\subsubsection{Fold}
+%-------------------
+
+The \texttt{fold} function, also called \texttt{reduce} or \texttt{accumulate}, accumulates a result by recursively applying a binary function to an element and the result of reducing the rest of the list. The result of folding an empty list is an identity element passed as a parameter. This is shown in infix notation in definition \ref{fold.defn}.
+
+\begin{equation}
+\text{fold}(\ast, x, id) = id \ast x_1\ast x_2 \ast x_3 \ast \dots \ast x_n \label{fold.defn}
+\end{equation}
+
+If the operation $\ast$ is not associative, a distinction must be made between a \emph{left} and \emph{right} fold (definitions \ref{foldl} and \ref{foldr} respectively).
+
+\begin{align}
+& \text{foldl}(\ast, x, id) = ((((id \ast x_1) \ast x_2) \ast x_3) \ast \dots \ast x_n) \label{foldl} \\
+& \text{foldr}(\ast, x, id) = (x_1 \ast (x_2 \ast (x_3 \ast \dots \ast (x_n \ast id)))) \label{foldr}
+\end{align}
+
+The right fold operation is a straightforward application of recursion \eqref{foldr.impl}.
+
+\begin{equation}
+\begin{split}
+& \text{foldr} :: ((A, B) \to B, [A], B) \to B \label{foldr.impl} \\
+& \text{foldr}(f, \emptyset, id) = id \\
+& \text{foldr}(f, x:xs, id) = f(x, \text{foldr}(f, xs, id))
+\end{split}
+\end{equation}
+
+The left fold, on the other hand, is somewhat trickier since XXX. In \eqref{foldl.impl} we use the \texttt{id} argument as an \emph{accumulator}:
+
+\begin{equation}
+\begin{split}
+& \text{foldl} :: ((B, A) \to B, [A], B) \to B \label{foldl.impl} \\
+& \text{foldl}(f, \emptyset, id) = id \\
+& \text{foldl}(f, x:xs, id) = \text{foldl}(f, xs, F(id, x))
+\end{split}
+\end{equation}
+
+As an aside, this implementation of foldl is \emph{tail recursive}: the recursive invocation is the last expression to be evaluated before returning from the function. This is a desirable property since it allows a compiler to transform the recursion into an equivalent iterative loop that only requires $\mathcal{O}(1)$ stack space instead of $\mathcal{O}(n)$. The intuitive but naïve implementations of \texttt{map}, \texttt{filter}, and \texttt{foldr} above are not tail recursive; they could be turned into ones that are by delegating to a helper function with an extra accumulator parameter.
+
+\subsubsection{Flatmap}
+%----------------------
+
+Another highly useful combinator is \texttt{flatmap}. It applies a list-valued function to each element of the input and then concatenates the results into a single list. From definition \ref{flatmap.defn} we see that \texttt{flatmap} is actually the monadic bind operation of the List type!
+
+\begin{equation}
+\label{flatmap.defn}
+\begin{split}
+&\text{flatmap} :: (A \to [B], [A]) \to [B] \\
+&\text{flatmap}(f, \emptyset) = \emptyset \\
+&\text{flatmap}(f, x:xs) = f(x) + \text{flatmap}(f, xs)
+\end{split}
+\end{equation}
+
+\subsubsection{Equivalences}
+
+Interestingly, the \texttt{fold} operation is in a sense more fundamental than \texttt{map}, \texttt{filter}, and \texttt{flatmap}. Each of the latter functions can be expressed in terms of the former, as demonstrated by identities \ref{map-foldr}, \ref{filter-foldr}, and \ref{flatmap-foldr}, but the opposite is not true.
+
+\begin{align}
+& \text{map}(f, x) \equiv \text{foldr}((y, ys) \to f(y):ys, x, \emptyset) \label{map-foldr} \\
+& \text{filter}(p, x) \equiv \text{foldr}((y, ys) \to \textbf{ if } p(y) \textbf{ then } y:ys \textbf{ else } ys, x, \emptyset) \label{filter-foldr} \\
+& \text{flatmap}(f, x) \equiv \text{foldr}((y, ys) \to f(y)+ys, x, \emptyset) \label{flatmap-foldr} 
+\end{align}
+
+\subsubsection{Other Combinators}
+%--------------------------------
+
+All these combinators can be trivially implemented for the Maybe monad as well, simply by observing the analogies $\text{Some}(x) \cong [x]$ and $\text{None} \cong \emptyset$. In particular, the \texttt{flatmap} operation for Maybe is exactly the monadic bind function like it was with List. This identity generalizes to all monads; \texttt{flatmap} is simply another name for \texttt{bind}.
+
+\subsection{Scala}
+
 \section{Reactive Primitives}
 
 \subsection{Behaviors and Events}
 
+-Reactive functional programming
+
+-Conal Elliot
+
+-Time-varying values
+
+-Behaviors: continuous
+
+-Events: discrete 
+
+-Combinators
+
+-Animation
+
+-Push vs pull
+
 \subsection{Futures and Promises}
+
+A \emph{future} is a placeholder, or a proxy, for a value that is not available when the future is created but may be at some later time, for instance, when a computation or a network request finishes. Informally, it can be seen as a (certificate of a) \emph{promise} to either provide a value in the future or report an error in case of failure.
+
+Some future implementations have separate future and promise types; in this case the promise is a write-only object that can be assigned a value or error exactly once (\emph{fulfilling} the promise), and the future is a read-only view of the eventual value or error, \emph{completed} by its associated promise. A future may be associated with several promises; in this case, only the first promise to complete the future succeeds. Similarly, a single promise may signal the completion of multiple futures.
+
+Futures may be synchronously \emph{waited on}; the wait operation blocks the thread of execution until the future is ready. A wait without a timeout specified may end up blocking indefinitely as there is no guarantee that the future ever completes.
+
+
+
+-Value or error
+
+-Typically asynchronous
+
+-Monadic: flatmap
+
+-More combinators: then, whenAll, whenAny, ...
+
+
 
 \subsection{Observables}
 
-\subsection{Async and Await}
+-Stream of (future) results
+
+-Duality
+
+Given a type \texttt{T}, 
+
+\begin{tabular}{|c|c|c|}
+\hline
+& Pull & Push \\\hline
+One & \texttt{T} & \texttt{Future[T]} \\\hline
+Many & \texttt{Iterable[T]} & \texttt{Observable[T]} \\\hline
+\end{tabular}
+
+
+-Combinators
+
+-Marble diagrams
+
+\subsection{\texttt{Async} and \texttt{await}}
+
+-Write async code that looks synchronous
+
+-Implemented via continuations/coroutines/resumable functions
+
+-Compiler transformation
+
+\begin{code}
+\begin{lstlisting}[language=Java,caption=Async/await.\label{listing:async-await}]
+...
+\end{lstlisting}
+\end{code}
 
 \subsection{Actors}
 
-\subsection{Composability}
+-Lightweight concurrent entities
+
+-Only communicate via message passing
+
+-Spawn hundreds or thousands if needed
+
+-Akka
 
 \section{Reactive libraries}
 
