@@ -41,7 +41,6 @@ Compared to regular desktop applications, this rudimentary interactivity was rat
 
 To achieve more fulfilling interaction, a client-side programming model was necessary. In \num{1995}, Brendan Eich developed the first version of \emph{JavaScript}, an interpreted language executed by the browser. The language could be used to dynamically manipulate the document, typically interactively as a response to input events such as mouse clicks and key presses. For security reasons, JavaScript code in a browser is executed in a ``sandbox'', a secure virtual machine, and the language initially offered practically no access to standard operating system services such as the file system or the network. Partially due to these limitations, client-side scripting was considered by many a novelty at best and a nuisance at worst. Listing~\ref{listing:js} exhibits a simple JavaScript program that displays a pop-up dialog as a response to a button click.
 
-
 \begin{code}
 \begin{lstlisting}[language=JavaScript,caption=A small JavaScript program.\label{listing:js}]
 var btn = document.getElementById("button");
@@ -108,7 +107,7 @@ Session tracking between requests can be implemented using \emph{cookies}, short
 
 The bulk of the client-server communication in a modern Web application is done using Ajax requests. Before Ajax, the only ways to do a \ab{http} request in a browser were navigating to a \ab{url} either by entering it manually or clicking a link, or submitting an \ab{html} form; the latter would typically load a new page as well. A full page load disrupts user interaction and loading and rendering the page takes time. Furthermore, the state of any JavaScript programs on the page is lost. With Ajax, it is possible to communicate with the server in the background, maintaining interactivity and the state of the user interface. 
 
-When Ajax was initially conceived, JavaScript programs were strictly single-threaded.\footnote{This restriction has recently been relaxed via the introduction of the WebWorkers mechanism.} Consequently, a request could not simply block until its completion without preventing user interaction during that time. Instead, a \emph{callback} function is associated with the request, invoked by the browser at certain stages of the request handling. In most cases, only the last stage---response received---is of interest. Listing~\ref{listing:ajax} demonstrates the making of an Ajax request and its asynchronous completion.
+Because JavaScript programs are single-threaded, an Ajax request cannot simply block until the request is complete without preventing user interaction during that time. Instead, a \emph{callback} function is associated with the request, invoked by the browser at certain stages of the request handling. In most cases, only the last stage---response received---is of interest. Listing~\ref{listing:ajax} demonstrates the making of an Ajax request and its asynchronous completion.
 
 An important limitation of Ajax requests is that they are subject to a security measure called the \emph{same-origin policy}. This prevents a JavaScript program from connecting to servers other than the one from which the script was loaded. Cross-origin resource sharing (\ab{cors}) is a mechanism developed to selectively loosen this restriction.
 
@@ -134,6 +133,49 @@ Since it is not possible for an \ab{http} server to initiate communication with 
 
 Several mechanisms have been developed to facilitate a more flexible way of server-to-client communication, often called \emph{server push}. As opposed to the client \emph{pulling} content from the server, the server is pushing data to the client when needed. Some push mechanisms utilize \ab{http} requests that are purposely kept open for longer than what is typical; the response is not sent until the server wishes to notify the client of some event. These techniques are, out of necessity, somewhat haphazard and \emph{ad hoc} in nature, and may not work reliably in an environment that expects \ab{http} requests to behave in a traditional manner.
 
+\emph{WebSocket} is a recent technology, part of the \ab{html}~5 family of Web standards, aiming to improve the networking capabilities of Web applications. In particular it can be used to implement an efficient and reliable server push mechanism. WebSocket connections are persistent, bidirectional, and impose considerably less overhead than \ab{http}. They are also not subject to the same-origin policy.
+
+<<<<<<< HEAD
+The bulk of the client-server communication in a modern Web application is done using Ajax requests. Before Ajax, the only ways to do a \ab{http} request in a browser were navigating to a \ab{url} either by entering it manually or clicking a link, or submitting an \ab{html} form; the latter would typically load a new page as well. A full page load disrupts user interaction and loading and rendering the page takes time. Furthermore, the state of any JavaScript programs on the page is lost. With Ajax, it is possible to communicate with the server in the background, maintaining interactivity and the state of the user interface. 
+=======
+Traditional Web sites are composed of multiple pages, between which the user navigates via hyperlinks. In contrast, many modern Web applications have embraced a single-page architecture, where most or all content changes are done programmatically by manipulating a single \ab{html} page. These are called, fittingly enough, \emph{single-page Web applications}.
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
+
+When Ajax was initially conceived, JavaScript programs were strictly single-threaded.\footnote{This restriction has recently been relaxed via the introduction of the WebWorkers mechanism.} Consequently, a request could not simply block until its completion without preventing user interaction during that time. Instead, a \emph{callback} function is associated with the request, invoked by the browser at certain stages of the request handling. In most cases, only the last stage---response received---is of interest. Listing~\ref{listing:ajax} demonstrates the making of an Ajax request and its asynchronous completion.
+
+<<<<<<< HEAD
+An important limitation of Ajax requests is that they are subject to a security measure called the \emph{same-origin policy}. This prevents a JavaScript program from connecting to servers other than the one from which the script was loaded. Cross-origin resource sharing (\ab{cors}) is a mechanism developed to selectively loosen this restriction.
+
+\begin{code}
+\begin{lstlisting}[language=JavaScript,caption=Making an Ajax request.\label{listing:ajax}]
+var request = new XMLHttpRequest();
+request.onreadystatechange = function() {
+    if(request.readystate == 4) {
+        // Response received
+        if(request.status == 200) {
+            handleResponse(request.response);
+        } else {
+            signalFailure();
+        }
+    }
+};
+request.open("GET", "http://www.example.com");
+request.send(); // Returns immediately
+\end{lstlisting}
+\end{code}
+
+Since it is not possible for an \ab{http} server to initiate communication with the client, \emph{polling} must be used if the client wishes to keep informed of possible changes occurring on the server. Often this is done manually by the user; sometimes JavaScript or special \ab{html} tags would be used to reload the page periodically. A sudden unexpected reload will typically not make the user very happy, however. Ajax requests can be used to poll the server and partially update the page contents without overly distracting the user. If state changes on the server are irregular, frequent polling may lead to a large number of superfluous requests. On the other hand, polling more infrequently leads to increased latency in delivering the updates to the client.
+=======
+-Rich Internet Applications - rich JavaScript UIs
+
+-UI events cause Ajax requests
+
+- Server replies with page fragments or instructions controlling JS
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
+
+Several mechanisms have been developed to facilitate a more flexible way of server-to-client communication, often called \emph{server push}. As opposed to the client \emph{pulling} content from the server, the server is pushing data to the client when needed. Some push mechanisms utilize \ab{http} requests that are purposely kept open for longer than what is typical; the response is not sent until the server wishes to notify the client of some event. These techniques are, out of necessity, somewhat haphazard and \emph{ad hoc} in nature, and may not work reliably in an environment that expects \ab{http} requests to behave in a traditional manner.
+
+<<<<<<< HEAD
 \emph{WebSocket} is a recent technology, part of the \ab{html}~5 family of Web standards, aiming to improve the networking capabilities of Web applications. In particular it can be used to implement an efficient and reliable server push mechanism. WebSocket connections are persistent, bidirectional, and impose considerably less overhead than \ab{http}. Moreover, they are not subject to the same-origin policy.
 
 \subsection{Single-page Web Applications}
@@ -142,16 +184,101 @@ Traditional Web sites are composed of multiple pages, between which the user nav
 
 The page on which the application operates may constitute a fully functional initial view, assembled by the server, or it may contain the minimal \ab{html} and JavaScript code required for ``bootstrapping'' the client side.
 
+=======
+- Text-based vs graphical
+
+- interactive applications react to input, typically wait most of the time
+
+The computer mouse and first mouse-based interfaces were developed by a team led by Douglas Engelbart at the Stanford Research Institute in the \num{1960s}. Graphical user interfaces were pioneered by Xerox in the \num{1970s}.
+
+-Mobile interfaces: touch instead of mouse, small screens
+
+\subsection{Widgets}
+
+A typical graphical user interface consists of a visual hierarchy of rectangular display elements, variously called controls, components, or \emph{widgets}. Widgets are usually reusable; their behavior can be customized so that, for instance, clicking two different buttons may have entirely distinct effects.
+
+Widgets can be loosely classified into three types: \emph{layout widgets}, \emph{output widgets}, and \emph{input widgets}. Layout widgets are used to visually group other widgets in order to visually indicate to the user their significance and logical relationships. Layouts can typically be nested. Output widgets are concerned with presenting data---textual, numeric, audiovisual or other---and input widgets allow user to enter input data.
+
+A core set of widget types has existed since the days of the Xerox Alto. These include windows, labels, push buttons, dropdown menus, and list boxes. (...)
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
 
 
 -Rich Internet Applications - rich JavaScript UIs
 
+<<<<<<< HEAD
 
 
 -UI events cause Ajax requests
 
 - Server replies with page fragments or instructions controlling JS
 
+=======
+-Observer pattern \cite{GoF}
+
+-Listing \ref{listing:observer}
+
+\begin{code}
+\begin{lstlisting}[language=Java,caption=An implementation of the observer pattern.\label{listing:observer}]
+interface Subject {
+    void addObserver(Observer);
+    void removeObserver(Observer);
+}
+
+interface Observer {
+    void notify();
+}
+
+class ConcreteSubject implements Subject {
+    private Collection<Observer> observers = 
+        new ArrayList<>();
+
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+    
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+    
+    protected void notifyObservers() {
+        for(Observer o : observers) {
+            o.notify();
+        }
+    }
+}
+
+
+\end{lstlisting}
+\end{code}
+
+\subsection{Model-View-Controller}
+
+In adherence to the well-established design principles of modularity and separation of concerns, when programming interactive applications it is often desirable to make a clear distinction between the user interface and the underlying data model manipulated via that interface. A common way to structure an application in this manner is the \emph{Model-View-Controller} (\ab{mvc}) pattern. It divides the architecture of an application into three distinct layers, each having well-defined responsibilities:
+
+\begin{itemize}
+
+    \item The Model layer is concerned with the data model, its integrity, constraints and validation of data, and its storage into and retrieval from an underlying persistence mechanism such as a relational database.
+    
+    \item The View layer implements the user interface, fetching data from the model and displaying it to the user. (...)
+    
+    \item Finally, the Controller concerns itself with handling user input, modifying the model and changing the view appropriately. (...)
+
+\end{itemize}
+
+
+
+
+
+There are several variations of \ab{mvc}, such as Model-View-Adapter and Model-View-Presenter. In the former, instead of the view directly fetching data from the model, the controller (now called adaptor) mediates all interaction between the other two layers. In the latter, user interaction logic is pushed from the view to a presenter layer, making the view itself simply a passive conduit of input and output.
+
+A closely related concept in client-server programming is \emph{multitier architecture}. (...)
+
+In a Web application, each of the layers can straddle the client-server division. (...)
+
+\section{Vaadin}
+
+Vaadin is a Web application framework written in Java that aims to make the design and maintenance of high-quality Web-based user interfaces easy. It attempts to abstract away many of the more inconvenient aspects of the Web platform, trying to provide an experience similar to traditional desktop application programming.
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
 
 \subsection{Model-View-Controller}
 
@@ -165,11 +292,41 @@ In adherence to the well-established design principles of modularity and separat
     
     \item Finally, the Controller concerns itself with handling user input, modifying the model and changing the view appropriately. (...)
 
+<<<<<<< HEAD
 \end{itemize}
+=======
+\begin{code}
+\begin{lstlisting}[language=Java,caption=A simple Vaadin application.\label{listing:vaadin-ui}]
+public class HelloUI extends UI {
+
+    protected void init(VaadinRequest request) {
+        VerticalLayout layout = new VerticalLayout();
+        Button button = new Button("Click me!", clickEvent -> {
+            Notification.show("Clicked!");
+        });    
+        layout.addComponent(button);
+        setContent(layout);
+    }
+}
+\end{lstlisting}
+\end{code}
+
+\subsection{Architecture}
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
 
 There are several variations of \ab{mvc}, such as Model-View-Adapter and Model-View-Presenter. In the former, instead of the view directly fetching data from the model, the controller (now called adaptor) mediates all interaction between the other two layers. In the latter, user interaction logic is pushed from the view to a presenter component, making the view itself simply a passive conduit of input and output.
 
+<<<<<<< HEAD
 A closely related concept in client-server programming is \emph{multitier architecture}. (...)
+=======
+-Compile Java to JavaScript
+
+-Partial implementation of Java Standard Library in addition to Java APIs for JS/DOM stuff
+
+-Clientside counterparts for server-side components created and maintained automatically
+
+\subsection{Communication}
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
 
 In a Web application, each of the layers can straddle the client-server division. (...)
 
@@ -177,9 +334,23 @@ In a Web application, each of the layers can straddle the client-server division
 
 - Text-based vs graphical
 
+<<<<<<< HEAD
 - interactive applications react to input, typically wait most of the time
 
 The computer mouse and first mouse-based interfaces were developed by a team led by Douglas Engelbart at the Stanford Research Institute in the \num{1960s}. Graphical user interfaces were pioneered by Xerox in the \num{1970s}.
+=======
+-Widgets have state that can only be changed by the server, changes sent to client
+
+-Client can make remote procedure calls to server to notify about events, request more data etc
+
+-Server can make RPCs to client
+
+\subsection{Component Model}
+
+-Fairly standard collection of widgets, called components
+
+-Basic observer pattern for event handling
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
 
 -Mobile interfaces: touch instead of mouse, small screens
 
@@ -187,6 +358,7 @@ The computer mouse and first mouse-based interfaces were developed by a team led
 
 A typical graphical user interface consists of a visual hierarchy of rectangular display elements, variously called controls, components, or \emph{widgets}. Widgets are usually reusable; their behavior can be customized so that, for instance, clicking two different buttons may have entirely distinct effects.
 
+<<<<<<< HEAD
 Widgets can be loosely classified into three types: \emph{layout widgets}, \emph{output widgets}, and \emph{input widgets}. Layout widgets are used to visually group other widgets in order to visually indicate to the user their significance and logical relationships. Layouts can typically be nested. Output widgets are concerned with presenting data---textual, numeric, audiovisual or other---and input widgets allow the user to enter input data.
 
 A core set of widget types has existed since the days of the Xerox Alto. These include windows, labels, push buttons, dropdown menus, and list boxes. (...)
@@ -230,5 +402,21 @@ class ConcreteSubject implements Subject {
 \end{code}
 
 \section{Concurrency}
+=======
+-Container, Item, Property
+
+-"Smart" wrappers for data
+
+-Bidirectional propagation of change
+
+-Based on observer pattern
+
+-Converters
+
+-Validators
+
+-Transactionality
+
+>>>>>>> ba64e82b897fa8e8c6eae94549b0ce52e05c34bc
 
 \subsection{Asynchronous Input and Output}
